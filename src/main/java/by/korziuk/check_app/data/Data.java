@@ -3,22 +3,21 @@ package by.korziuk.check_app.data;
 import by.korziuk.check_app.model.Card;
 import by.korziuk.check_app.model.Product;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Data {
 
-    private Collection<Product> productCollection;
-    private Collection<Card> cardCollection;
+    private final List<Product> productCollection;
+    private final List<Card> cardCollection;
 
-    public Collection<Product> getProductCollection() {
-        return productCollection;
+    public Data() {
+        productCollection = new ArrayList<>();
+        cardCollection = new ArrayList<>();
+        initData();
     }
 
-    public Collection<Card> getCardCollection() {
-        return cardCollection;
-    }
-
-    {
+    private void initData() {
         productCollection.add(new Product(1, "potato", "potato super", 140));
         productCollection.add(new Product(2, "potato", "potato mini", 99));
         productCollection.add(new Product(3, "potato", "potato maxi", 201));
@@ -35,5 +34,13 @@ public class Data {
         cardCollection.add(new Card(8640, "Dmitry", "Sidorov", 1));
         cardCollection.add(new Card(7854, "Pol", "Morgan", 3));
         cardCollection.add(new Card(1211, "Ron", "Grieen", 0));
+    }
+
+    public List<Product> getProductCollection() {
+        return productCollection;
+    }
+
+    public List<Card> getCardCollection() {
+        return cardCollection;
     }
 }

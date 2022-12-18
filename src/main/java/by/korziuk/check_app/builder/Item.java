@@ -1,5 +1,6 @@
 package by.korziuk.check_app.builder;
 
+import by.korziuk.check_app.CheckRunner;
 import by.korziuk.check_app.model.Product;
 
 public class Item {
@@ -48,7 +49,11 @@ public class Item {
 
     public void setProduct(int productId) {
         //ToDo Get data from dataSet or DataBase
-        this.product = null;
+        this.product = CheckRunner.data.getProductCollection()
+                .stream()
+                .filter(product -> product.getId() == productId)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

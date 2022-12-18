@@ -4,6 +4,7 @@ import by.korziuk.check_app.builder.Item;
 import by.korziuk.check_app.builder.ItemBuilder;
 import by.korziuk.check_app.model.Card;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,17 +23,27 @@ public class CustomerCheck implements Check {
         System.out.println("create customer check ...");
 
         Map<Integer, Integer> inputData = handle(data);
-
         System.out.println("input data converted into map ...");
 
-        //ToDo iterate data and fill items list
-
-        Item item = new ItemBuilder()
-                .setQuantity(5)
-                .setProduct(5)
-                .setdDiscount(5)
-                .setCard(1234)
-                .build();
+        // iterate data and fill items list
+        items = new ArrayList<>();
+        inputData.forEach((key, value) -> {
+            if (key == 0) { // card promo
+                items.add(new ItemBuilder()
+                        .setQuantity(0)
+                        .setProduct(0)
+                        .setdDiscount(0)
+                        .setCard(value)
+                        .build());
+            } else { // product
+                items.add(new ItemBuilder()
+                        .setQuantity(value)
+                        .setProduct(key)
+                        .setdDiscount(calculateDiscount(value))
+                        .setCard(0)
+                        .build());
+            }
+        });
     }
 
     /**
@@ -98,5 +109,33 @@ public class CustomerCheck implements Check {
             }
         }
         return true;
+    }
+
+    /**
+     * Method calculate discount for product, by default 0, but if quantity more 5 discount 10%
+     * @param quantity of the product
+     * @return discount in %
+     */
+    private int calculateDiscount(int quantity) {
+        if (quantity > 5) {
+            return 10;
+        } else return 0;
+    }
+
+    @Override
+    public void printCheck() {
+        System.out.println();
+        System.out.printf("%4s  %-20s  %8s  %8s \n", "QTY", "DESCRIPTION", "PRICE", "TOTAL");
+        items.stream()
+                .filter(element -> element.getProduct() != null)
+                .forEach(item -> System.out.printf("%4s  %-20s  %8s  %8s \n",
+                item.getQuantity(),
+                item.getProduct().getDescription(),
+                item.getProduct().getPrice(),
+                calculateTotal(item.getQuantity(), item.getProduct().getPrice(), item.getDiscount())));
+    }
+
+    private long calculateTotal(int quantity, long price, int discount) {
+        return quantity * price - (quantity * price * discount / 100);
     }
 }
