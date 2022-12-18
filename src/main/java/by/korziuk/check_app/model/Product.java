@@ -1,16 +1,18 @@
 package by.korziuk.check_app.model;
 
+import java.math.BigDecimal;
+
 public class Product {
 
     private int id;
     private String name;
     private String description;
-    private long price;
+    private BigDecimal price;
 
     public Product() {
     }
 
-    public Product(int id, String name, String description, long price) {
+    public Product(int id, String name, String description, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -41,11 +43,11 @@ public class Product {
         this.description = description;
     }
 
-    public long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

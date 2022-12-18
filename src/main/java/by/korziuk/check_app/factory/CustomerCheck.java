@@ -4,6 +4,8 @@ import by.korziuk.check_app.builder.Item;
 import by.korziuk.check_app.builder.ItemBuilder;
 import by.korziuk.check_app.model.Card;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -124,18 +126,52 @@ public class CustomerCheck implements Check {
 
     @Override
     public void printCheck() {
+        BigDecimal total = new BigDecimal("0.00");
         System.out.println();
-        System.out.printf("%4s  %-20s  %8s  %8s \n", "QTY", "DESCRIPTION", "PRICE", "TOTAL");
-        items.stream()
-                .filter(element -> element.getProduct() != null)
-                .forEach(item -> System.out.printf("%4s  %-20s  %8s  %8s \n",
-                item.getQuantity(),
-                item.getProduct().getDescription(),
-                item.getProduct().getPrice(),
-                calculateTotal(item.getQuantity(), item.getProduct().getPrice(), item.getDiscount())));
+        System.out.printf("%4s  %-20s  %8s  %8s\n", "QTY", "DESCRIPTION", "PRICE", "TOTAL");
+
+        for (Item item : items) {
+            BigDecimal totalItemPrice, discountItemPrice = new BigDecimal("0.00");
+            if (item.getProduct() != null) {
+                System.out.printf("%4s  %-20s  %8s  %8s\n",
+                        item.getQuantity(),
+                        item.getProduct().getDescription(),
+                        item.getProduct().getPrice(),
+                        totalItemPrice = calculateTotal(item.getQuantity(), item.getProduct().getPrice()));
+                if (item.getDiscount() > 0) {
+                    System.out.printf("                         discount:%4s%8s\n",
+                            item.getDiscount() + "%",
+                            discountItemPrice = totalItemPrice.subtract(calculateDiscont(totalItemPrice, item.getDiscount())));
+                }
+
+                total = total.add(calculateTotal(item.getQuantity(), item.getProduct().getPrice())).subtract(discountItemPrice);
+            }
+        }
+
+        System.out.println("==============================================");
+        System.out.printf("TOTAL %40s", total);
     }
 
-    private long calculateTotal(int quantity, long price, int discount) {
-        return quantity * price - (quantity * price * discount / 100);
+    /**
+     * Method calculate total price for product
+     * @param quantity of roducts
+     * @param price of product
+     * @return total price for product
+     */
+    private BigDecimal calculateTotal(int quantity, BigDecimal price) {
+        return price.multiply(new BigDecimal(quantity));
+    }
+
+    /**
+     * Method calculate discount for product
+     * @param total product price
+     * @param discount for product in %
+     * @return discount = total * discount / 100%
+     */
+    private BigDecimal calculateDiscont(BigDecimal total, int discount) {
+        BigDecimal totalWithDiscount = total
+                .multiply(new BigDecimal(discount))
+                .divide(new BigDecimal("100"), RoundingMode.DOWN);
+        return total.subtract(totalWithDiscount);
     }
 }
