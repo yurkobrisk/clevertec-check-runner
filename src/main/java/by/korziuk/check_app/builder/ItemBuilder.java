@@ -16,7 +16,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setdDiscount(int discount) {
+    public ItemBuilder setDiscount(int discount) {
         this.discount = discount;
         return this;
     }
@@ -33,6 +33,7 @@ public class ItemBuilder {
         item.setProduct(productId);
         item.setDiscount(discount);
         item.setCardNumber(cardNumber);
+        item.setCard(cardNumber);
         return item;
     }
 }

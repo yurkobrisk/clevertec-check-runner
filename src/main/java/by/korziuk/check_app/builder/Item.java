@@ -1,7 +1,10 @@
 package by.korziuk.check_app.builder;
 
 import by.korziuk.check_app.CheckRunner;
+import by.korziuk.check_app.model.Card;
 import by.korziuk.check_app.model.Product;
+
+import java.util.Objects;
 
 public class Item {
 
@@ -10,6 +13,7 @@ public class Item {
     private int discount;
     private int cardNumber;
     private Product product;
+    private Card card;
 
     public int getQuantity() {
         return quantity;
@@ -52,6 +56,18 @@ public class Item {
         this.product = CheckRunner.data.getProductCollection()
                 .stream()
                 .filter(product -> product.getId() == productId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(int cardId) {
+        this.card = CheckRunner.data.getCardCollection()
+                .stream()
+                .filter(card -> card.getId() == cardId)
                 .findFirst()
                 .orElse(null);
     }

@@ -30,7 +30,7 @@ public class Data {
         productCollection.add(new Product(9, "pesca", "pesca italy", new BigDecimal("9.60")));
         productCollection.add(new Product(10, "fikidindia", "fikidindia small", new BigDecimal("8.99")));
 
-        cardCollection.add(new Card(1234, "Ivan", "Petrov", 0));
+        cardCollection.add(new Card(1234, "Ivan", "Petrov", 7));
         cardCollection.add(new Card(4428, "Petr", "Ivanov", 5));
         cardCollection.add(new Card(8640, "Dmitry", "Sidorov", 1));
         cardCollection.add(new Card(7854, "Pol", "Morgan", 3));

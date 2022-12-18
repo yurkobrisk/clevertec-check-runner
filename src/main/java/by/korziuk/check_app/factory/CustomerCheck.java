@@ -34,14 +34,14 @@ public class CustomerCheck implements Check {
                 items.add(new ItemBuilder()
                         .setQuantity(0)
                         .setProduct(0)
-                        .setdDiscount(0)
+                        .setDiscount(0)
                         .setCard(value)
                         .build());
             } else { // product
                 items.add(new ItemBuilder()
                         .setQuantity(value)
                         .setProduct(key)
-                        .setdDiscount(calculateDiscount(value))
+                        .setDiscount(calculateDiscount(value))
                         .setCard(0)
                         .build());
             }
@@ -126,6 +126,8 @@ public class CustomerCheck implements Check {
 
     @Override
     public void printCheck() {
+        //ToDo create method return String
+        //ToDo create method save to file
         BigDecimal total = new BigDecimal("0.00");
         System.out.println();
         System.out.printf("%4s  %-20s  %8s  %8s\n", "QTY", "DESCRIPTION", "PRICE", "TOTAL");
@@ -141,15 +143,27 @@ public class CustomerCheck implements Check {
                 if (item.getDiscount() > 0) {
                     System.out.printf("                         discount:%4s%8s\n",
                             item.getDiscount() + "%",
-                            discountItemPrice = totalItemPrice.subtract(calculateDiscont(totalItemPrice, item.getDiscount())));
+                            discountItemPrice = (getDiscont(totalItemPrice, item.getDiscount())));
                 }
 
-                total = total.add(calculateTotal(item.getQuantity(), item.getProduct().getPrice())).subtract(discountItemPrice);
+                total = total.add(totalItemPrice).subtract(discountItemPrice);
+            }
+            if (item.getCardNumber() != 0) {
+                card = item.getCard();
             }
         }
 
         System.out.println("==============================================");
+        if (card != null) {
+            System.out.printf("                discount card-%-6s%2s%8s\n",
+                    card.getId(),
+                    card.getDiscount() + "%",
+                    getDiscont(total, card.getDiscount()));
+            System.out.printf("TOTAL %40s", total.subtract(getDiscont(total, card.getDiscount())));
+            return;
+        }
         System.out.printf("TOTAL %40s", total);
+
     }
 
     /**
@@ -173,5 +187,11 @@ public class CustomerCheck implements Check {
                 .multiply(new BigDecimal(discount))
                 .divide(new BigDecimal("100"), RoundingMode.DOWN);
         return total.subtract(totalWithDiscount);
+    }
+
+    private BigDecimal getDiscont(BigDecimal total, int discount) {
+        return total
+                .multiply(new BigDecimal(discount))
+                .divide(new BigDecimal("100"), RoundingMode.DOWN);
     }
 }
