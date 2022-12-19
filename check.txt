@@ -1,12 +1,14 @@
 
  QTY  DESCRIPTION              PRICE     TOTAL
-   7  potato mini               0.99      6.93
-                         discount: 10%    0.69
-   1  potato maxi               2.01      2.01
-   8  pomodoro super            8.90     71.20
-                         discount: 10%    7.12
-   1  pomodoro mini             9.00      9.00
-   2  pesca italy               9.60     19.20
+   9  potato super              1.40     12.60
+                         discount: 10%    1.26
+   1  potato mini               0.99      0.99
+   2  potato maxi               2.01      4.02
+   8  pomodoro mini             9.00     72.00
+                         discount: 10%    7.20
+   2  pomodoro maxi             5.40     10.80
+   1  apple green               4.70      4.70
+   5  banana yellow             5.60     28.00
 ==============================================
-                discount card-1234  7%    7.03
-TOTAL                                    93.50
+                discount card-1234  7%    8.72
+TOTAL                                   115.93

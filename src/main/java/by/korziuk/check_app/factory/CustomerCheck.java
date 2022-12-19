@@ -4,9 +4,7 @@ import by.korziuk.check_app.builder.Item;
 import by.korziuk.check_app.builder.ItemBuilder;
 import by.korziuk.check_app.model.Card;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -26,6 +24,10 @@ public class CustomerCheck implements Check {
     @Override
     public void create(String[] data) {
 //        System.out.println("create customer check ...");
+        if (isFileName(data)) {
+            String dataTxt = readFile(data[0]);
+            data = dataTxt.split(" ");
+        }
 
         Map<Integer, Integer> inputData = handle(data);
 //        System.out.println("input data converted into map ...");
@@ -49,6 +51,38 @@ public class CustomerCheck implements Check {
                         .build());
             }
         });
+    }
+
+    /**
+     * Method checkes array is it a file name
+     * @param data input string array
+     * @return true if it`s just a simple file name
+     */
+    private boolean isFileName(String[] data) {
+        if (data.length >1) {
+            return false;
+        } else {
+            return data[0].matches("(\\w{1,}).txt");
+        }
+    }
+
+    /**
+     * Method read data from file
+     * @param fileName input file name
+     * @return data from file as a string
+     */
+    private String readFile(String fileName) {
+        String data = "";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            data = reader.readLine();
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Input file not found!");
+        } catch (IOException e) {
+            System.out.printf("Can`t read data from file %s", fileName);
+        }
+        return data;
     }
 
     /**
@@ -147,6 +181,9 @@ public class CustomerCheck implements Check {
      * @return check view in text format
      */
     private StringBuilder createView() {
+        if (items.size() == 0) {
+            return new StringBuilder();
+        }
         BigDecimal total = new BigDecimal("0.00");
         StringBuilder resultCheck = new StringBuilder("\n");
         resultCheck.append(String.format("%4s  %-20s  %8s  %8s\n", "QTY", "DESCRIPTION", "PRICE", "TOTAL"));
