@@ -25,10 +25,10 @@ public class CustomerCheck implements Check {
      */
     @Override
     public void create(String[] data) {
-        System.out.println("create customer check ...");
+//        System.out.println("create customer check ...");
 
         Map<Integer, Integer> inputData = handle(data);
-        System.out.println("input data converted into map ...");
+//        System.out.println("input data converted into map ...");
 
         // iterate data and fill items list
         items = new ArrayList<>();
