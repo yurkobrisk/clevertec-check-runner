@@ -4,6 +4,9 @@ import by.korziuk.check_app.builder.Item;
 import by.korziuk.check_app.builder.ItemBuilder;
 import by.korziuk.check_app.model.Card;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -126,18 +129,24 @@ public class CustomerCheck implements Check {
 
     @Override
     public void printCheck() {
-        //ToDo create method return String
-        System.out.println(createView());
-        //ToDo create method save to file
+        StringBuilder view = createView();
+        System.out.println(view);
 
-
+        File file = new File("check.txt");
+        System.out.print("check writing to: " + file.getAbsolutePath());
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(view.toString());
+            System.out.println(" ... file done.");
+        } catch (IOException e) {
+            System.out.println("File saves error ...");
+        }
     }
 
     /**
      * Method create view for check
      * @return check view in text format
      */
-    public StringBuilder createView() {
+    private StringBuilder createView() {
         BigDecimal total = new BigDecimal("0.00");
         StringBuilder resultCheck = new StringBuilder("\n");
         resultCheck.append(String.format("%4s  %-20s  %8s  %8s\n", "QTY", "DESCRIPTION", "PRICE", "TOTAL"));
@@ -170,10 +179,10 @@ public class CustomerCheck implements Check {
                     card.getId(),
                     card.getDiscount() + "%",
                     getDiscont(total, card.getDiscount())));
-            resultCheck.append(String.format("TOTAL %40s", total.subtract(getDiscont(total, card.getDiscount()))));
+            resultCheck.append(String.format("TOTAL %40s\n", total.subtract(getDiscont(total, card.getDiscount()))));
             return resultCheck;
         }
-        resultCheck.append(String.format("TOTAL %40s", total));
+        resultCheck.append(String.format("TOTAL %40s\n", total));
         return resultCheck;
     }
 
