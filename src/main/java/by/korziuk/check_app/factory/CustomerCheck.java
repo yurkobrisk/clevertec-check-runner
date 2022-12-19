@@ -127,23 +127,33 @@ public class CustomerCheck implements Check {
     @Override
     public void printCheck() {
         //ToDo create method return String
+        System.out.println(createView());
         //ToDo create method save to file
+
+
+    }
+
+    /**
+     * Method create view for check
+     * @return check view in text format
+     */
+    public StringBuilder createView() {
         BigDecimal total = new BigDecimal("0.00");
-        System.out.println();
-        System.out.printf("%4s  %-20s  %8s  %8s\n", "QTY", "DESCRIPTION", "PRICE", "TOTAL");
+        StringBuilder resultCheck = new StringBuilder("\n");
+        resultCheck.append(String.format("%4s  %-20s  %8s  %8s\n", "QTY", "DESCRIPTION", "PRICE", "TOTAL"));
 
         for (Item item : items) {
             BigDecimal totalItemPrice, discountItemPrice = new BigDecimal("0.00");
             if (item.getProduct() != null) {
-                System.out.printf("%4s  %-20s  %8s  %8s\n",
+                resultCheck.append(String.format("%4s  %-20s  %8s  %8s\n",
                         item.getQuantity(),
                         item.getProduct().getDescription(),
                         item.getProduct().getPrice(),
-                        totalItemPrice = calculateTotal(item.getQuantity(), item.getProduct().getPrice()));
+                        totalItemPrice = calculateTotal(item.getQuantity(), item.getProduct().getPrice())));
                 if (item.getDiscount() > 0) {
-                    System.out.printf("                         discount:%4s%8s\n",
+                    resultCheck.append(String.format("                         discount:%4s%8s\n",
                             item.getDiscount() + "%",
-                            discountItemPrice = (getDiscont(totalItemPrice, item.getDiscount())));
+                            discountItemPrice = (getDiscont(totalItemPrice, item.getDiscount()))));
                 }
 
                 total = total.add(totalItemPrice).subtract(discountItemPrice);
@@ -153,17 +163,18 @@ public class CustomerCheck implements Check {
             }
         }
 
-        System.out.println("==============================================");
+        resultCheck.append("==============================================\n");
+
         if (card != null) {
-            System.out.printf("                discount card-%-6s%2s%8s\n",
+            resultCheck.append(String.format("                discount card-%-6s%2s%8s\n",
                     card.getId(),
                     card.getDiscount() + "%",
-                    getDiscont(total, card.getDiscount()));
-            System.out.printf("TOTAL %40s", total.subtract(getDiscont(total, card.getDiscount())));
-            return;
+                    getDiscont(total, card.getDiscount())));
+            resultCheck.append(String.format("TOTAL %40s", total.subtract(getDiscont(total, card.getDiscount()))));
+            return resultCheck;
         }
-        System.out.printf("TOTAL %40s", total);
-
+        resultCheck.append(String.format("TOTAL %40s", total));
+        return resultCheck;
     }
 
     /**
