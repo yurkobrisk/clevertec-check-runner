@@ -1,0 +1,10 @@
+1,  potato,     potato super,       1.40;
+2,  potato,     potato mini,        0.99;
+3,  potato,     potato maxi,        2.01;
+4,  pomodoro,   pomodoro super,     8.90;
+5,  pomodoro,   pomodoro mini,      9.00;
+6,  pomodoro,   pomodoro maxi,      5.40;
+7,  apple,      apple green,        4.70;
+8,  banana,     banana yellow,      5.60;
+9,  pesca,      pesca italy,        9.60;
+10, fikidindia, fikidindia small,   8.99;

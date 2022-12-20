@@ -7,6 +7,7 @@ import by.korziuk.check_app.exception.NoDataException;
 import by.korziuk.check_app.exception.NoSuchCardException;
 import by.korziuk.check_app.exception.NoSuchIdentifierException;
 import by.korziuk.check_app.model.Card;
+import by.korziuk.check_app.model.Product;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -79,11 +80,11 @@ public class CustomerCheck implements Check {
      * @param fileName input file name
      * @return data from file as a string
      */
-    private String readFile(String fileName) {
+    protected String readFile(String fileName) {
         String data = "";
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            data = reader.readLine();
+            data = reader.lines().collect(Collectors.joining());
             reader.close();
         } catch (FileNotFoundException e) {
             System.out.println("Input file not found!");
@@ -91,6 +92,40 @@ public class CustomerCheck implements Check {
             System.out.printf("Can`t read data from file %s", fileName);
         }
         return data;
+    }
+
+    /**
+     * Method handle input data to products
+     * @param data input String
+     * @return list of products
+     */
+    protected ArrayList<Product> handleDataAsProduct(String data) {
+        List<Product> products = Arrays.stream(data.split(";"))
+                .map(record -> record.split(","))
+                .map(array -> new Product(
+                        Integer.parseInt(array[0].trim()),
+                        array[1].trim(),
+                        array[2].trim(),
+                        new BigDecimal(array[3].trim())))
+                .collect(Collectors.toList());
+        return new ArrayList<>(products);
+    }
+
+    /**
+     * Method handle input data to cards
+     * @param data input String
+     * @return list of cards
+     */
+    protected ArrayList<Card> handleDataAsCard(String data) {
+        List<Card> cards = Arrays.stream(data.split(";"))
+                .map(record -> record.split(","))
+                .map(array -> new Card(
+                        Integer.parseInt(array[0].trim()),
+                        array[1].trim(),
+                        array[2].trim(),
+                        Integer.parseInt(array[3].trim())))
+                .collect(Collectors.toList());
+        return new ArrayList<>(cards);
     }
 
     /**

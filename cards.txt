@@ -1,0 +1,5 @@
+1234, Ivan, Petrov, 7;
+4428, Petr, Ivanov, 5;
+8640, Dmitry, Sidorov, 1;
+7854, Pol, Morgan, 3;
+1211, Ron, Grieen, 0;
