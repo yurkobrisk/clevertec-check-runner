@@ -9,8 +9,8 @@ import java.util.List;
 
 public class Data {
 
-    private final List<Product> productCollection;
-    private final List<Card> cardCollection;
+    private List<Product> productCollection;
+    private List<Card> cardCollection;
 
     public Data() {
         productCollection = new ArrayList<>();
@@ -43,5 +43,13 @@ public class Data {
 
     public List<Card> getCardCollection() {
         return cardCollection;
+    }
+
+    public void setProductCollection(List<Product> productCollection) {
+        this.productCollection = productCollection;
+    }
+
+    public void setCardCollection(List<Card> cardCollection) {
+        this.cardCollection = cardCollection;
     }
 }

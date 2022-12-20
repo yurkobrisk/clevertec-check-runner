@@ -1,5 +1,6 @@
 package by.korziuk.check_app.factory;
 
+import by.korziuk.check_app.CheckRunner;
 import by.korziuk.check_app.builder.Item;
 import by.korziuk.check_app.builder.ItemBuilder;
 import by.korziuk.check_app.exception.IncorrectDataException;
@@ -25,14 +26,19 @@ public class CustomerCheck implements Check {
      */
     @Override
     public void create(String[] data) throws IncorrectDataException, NoDataException {
-//        System.out.println("create customer check ...");
+//        create customer check ...
         if (data.length == 0) {
             throw new NoDataException(" ... no input data found!");
-        }
-        if (isFileName(data)) {
+        } else if (hasInputDataFileNames(data)) {
+            CheckRunner.data.setProductCollection(handleDataAsProduct(readFile(data[0])));
+            CheckRunner.data.setCardCollection(handleDataAsCard(readFile(data[1])));
+            String dataTxt = readFile(data[2]);
+            data = dataTxt.split(" ");
+        } else if (isFileName(data)) {
             String dataTxt = readFile(data[0]);
             data = dataTxt.split(" ");
         }
+
 
         Map<Integer, Integer> inputData = handle(data);
 //        System.out.println("input data converted into map ...");
@@ -76,6 +82,28 @@ public class CustomerCheck implements Check {
     }
 
     /**
+     * Method checks is String array contains file names
+     * @param data string array
+     * @return true if data in array is file names
+     */
+    protected boolean hasInputDataFileNames(String[] data) {
+        if (data.length != 3) {
+            return false;
+        } else {
+            return Arrays.stream(data).filter(this::isFileName).count() == 3;
+        }
+    }
+
+    /**
+     * Method checks is input string same as a pattern file name
+     * @param fileName string
+     * @return true if it`s file name
+     */
+    protected boolean isFileName(String fileName) {
+        return fileName.matches("(\\w{1,}).txt");
+    }
+
+    /**
      * Method read data from file
      * @param fileName input file name
      * @return data from file as a string
@@ -100,6 +128,7 @@ public class CustomerCheck implements Check {
      * @return list of products
      */
     protected ArrayList<Product> handleDataAsProduct(String data) {
+        //ToDo check data from file is correct
         List<Product> products = Arrays.stream(data.split(";"))
                 .map(record -> record.split(","))
                 .map(array -> new Product(
@@ -107,7 +136,7 @@ public class CustomerCheck implements Check {
                         array[1].trim(),
                         array[2].trim(),
                         new BigDecimal(array[3].trim())))
-                .collect(Collectors.toList());
+                .toList();
         return new ArrayList<>(products);
     }
 
@@ -117,6 +146,7 @@ public class CustomerCheck implements Check {
      * @return list of cards
      */
     protected ArrayList<Card> handleDataAsCard(String data) {
+        //ToDo check data from file is correct
         List<Card> cards = Arrays.stream(data.split(";"))
                 .map(record -> record.split(","))
                 .map(array -> new Card(

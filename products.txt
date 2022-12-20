@@ -8,3 +8,4 @@
 8,  banana,     banana yellow,      5.60;
 9,  pesca,      pesca italy,        9.60;
 10, fikidindia, fikidindia small,   8.99;
+11, bread,      brown bread,        1.02;

@@ -66,9 +66,9 @@ class CustomerCheckTest {
     public void should_handle_null_empty_data_and_return_null() {
         //Given
         String[] inpuData = new String[]{};
-        //When
         Map<Integer, Integer> resultMap1 = null;
         Map<Integer, Integer> resultMap2 = null;
+        //When
         try {
             resultMap1 = new CustomerCheck().handle(inpuData);
             resultMap2 = new CustomerCheck().handle(null);
@@ -83,9 +83,9 @@ class CustomerCheckTest {
     @Test
     public void handleDataAsProduct() {
         //Given
-        //When
         CustomerCheck customerCheck = new CustomerCheck();
         String data = customerCheck.readFile("products.txt");
+        //When
         ArrayList<Product> products = customerCheck.handleDataAsProduct(data);
         //Then
         assertThat(products.size()).isEqualTo(10);
@@ -96,13 +96,23 @@ class CustomerCheckTest {
     @Test
     public void handleDataAsCard() {
         //Given
-        //When
         CustomerCheck customerCheck = new CustomerCheck();
         String data = customerCheck.readFile("cards.txt");
+        //When
         ArrayList<Card> products = customerCheck.handleDataAsCard(data);
         //Then
         assertThat(products.size()).isEqualTo(5);
         assertThat(products.get(3).getHolderLastName()).isEqualTo("Morgan");
         assertThat(products.get(0).getId()).isEqualTo(1234);
+    }
+
+    @Test
+    public void hasInputDataFileNames() {
+        //Given
+        CustomerCheck customerCheck = new CustomerCheck();
+        //When
+        boolean isDataPresent = customerCheck.hasInputDataFileNames(new String[]{"product.txt", "cards.txt", "input.txt"});
+        //Then
+        assertThat(isDataPresent).isTrue();
     }
 }
