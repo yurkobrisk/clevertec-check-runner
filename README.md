@@ -24,6 +24,10 @@ It`s just test project 🛒 from the Clevertec
 >
 >>2. type: **gradlew build** *[building the project will start]*
 >
->>3. type: **gradlew run --args="2-4 1-5 6-9 3-1 4-2 5-2 7-9 card-1234"** *[starting...]*
-
-** params: productId-quantity & card-cardNumber
+>>3.1 for start with params in line type: **gradlew run --args="2-4 1-5 6-9 3-1 4-2 5-2 7-9 card-1234"** *[starting...]*
+>>
+>>** args: productId-quantity & card-cardNumber
+>
+>>3.2 for start with filename type: **gradlew run --args="filename.txt"** *[starting...]*
+>>
+>>** or use pattern - filename.txt - as param if it`s using data from file 
