@@ -101,7 +101,7 @@ class CustomerCheckTest {
         //When
         ArrayList<Card> products = customerCheck.handleDataAsCard(data);
         //Then
-        assertThat(products.size()).isEqualTo(5);
+        assertThat(products.size()).isEqualTo(6);
         assertThat(products.get(3).getHolderLastName()).isEqualTo("Morgan");
         assertThat(products.get(0).getId()).isEqualTo(1234);
     }
@@ -111,7 +111,7 @@ class CustomerCheckTest {
         //Given
         CustomerCheck customerCheck = new CustomerCheck();
         //When
-        boolean isDataPresent = customerCheck.hasInputDataFileNames(new String[]{"product.txt", "cards.txt", "input.txt"});
+        boolean isDataPresent = customerCheck.hasInputDataFileNames(new String[]{"products.txt", "cards.txt", "input.txt"});
         //Then
         assertThat(isDataPresent).isTrue();
     }
