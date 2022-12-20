@@ -1,10 +1,13 @@
 package by.korziuk.check_app.builder;
 
+import by.korziuk.check_app.exception.NoSuchCardException;
+import by.korziuk.check_app.exception.NoSuchIdentifierException;
+
 public class ItemBuilder {
-    private int quantity = 1;
-    private int productId = 0;
-    private int discount = 0;
-    private int cardNumber = 0;
+    private int quantity = -1;
+    private int productId = -1;
+    private int discount = -1;
+    private int cardNumber = -1;
 
     public ItemBuilder setQuantity(int quantity) {
         this.quantity = quantity;
@@ -26,7 +29,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public Item build() {
+    public Item build() throws NoSuchIdentifierException, NoSuchCardException {
         Item item = new Item();
         item.setQuantity(quantity);
         item.setProductId(productId);

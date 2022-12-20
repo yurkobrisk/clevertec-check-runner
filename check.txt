@@ -2,13 +2,12 @@
  QTY  DESCRIPTION              PRICE     TOTAL
    9  potato super              1.40     12.60
                          discount: 10%    1.26
-   1  potato mini               0.99      0.99
-   2  potato maxi               2.01      4.02
-   8  pomodoro mini             9.00     72.00
-                         discount: 10%    7.20
+   6  potato mini               0.99      5.94
+                         discount: 10%    0.59
    2  pomodoro maxi             5.40     10.80
-   1  apple green               4.70      4.70
-   5  banana yellow             5.60     28.00
+   6  apple green               4.70     28.20
+                         discount: 10%    2.82
+   9  banana yellow             5.60     50.40
+                         discount: 10%    5.04
 ==============================================
-                discount card-1234  7%    8.72
-TOTAL                                   115.93
+TOTAL                                    98.23

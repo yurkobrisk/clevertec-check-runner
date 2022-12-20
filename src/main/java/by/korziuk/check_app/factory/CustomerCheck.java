@@ -2,15 +2,16 @@ package by.korziuk.check_app.factory;
 
 import by.korziuk.check_app.builder.Item;
 import by.korziuk.check_app.builder.ItemBuilder;
+import by.korziuk.check_app.exception.IncorrectDataException;
+import by.korziuk.check_app.exception.NoDataException;
+import by.korziuk.check_app.exception.NoSuchCardException;
+import by.korziuk.check_app.exception.NoSuchIdentifierException;
 import by.korziuk.check_app.model.Card;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CustomerCheck implements Check {
@@ -22,8 +23,11 @@ public class CustomerCheck implements Check {
      * @param data input arguments
      */
     @Override
-    public void create(String[] data) {
+    public void create(String[] data) throws IncorrectDataException, NoDataException {
 //        System.out.println("create customer check ...");
+        if (data.length == 0) {
+            throw new NoDataException(" ... no input data found!");
+        }
         if (isFileName(data)) {
             String dataTxt = readFile(data[0]);
             data = dataTxt.split(" ");
@@ -36,19 +40,23 @@ public class CustomerCheck implements Check {
         items = new ArrayList<>();
         inputData.forEach((key, value) -> {
             if (key == 0) { // card promo
-                items.add(new ItemBuilder()
-                        .setQuantity(0)
-                        .setProduct(0)
-                        .setDiscount(0)
-                        .setCard(value)
-                        .build());
+                try {
+                    items.add(new ItemBuilder()
+                            .setCard(value)
+                            .build());
+                } catch (NoSuchCardException | NoSuchIdentifierException e) {
+                    System.out.println(e.getMessage());
+                }
             } else { // product
-                items.add(new ItemBuilder()
-                        .setQuantity(value)
-                        .setProduct(key)
-                        .setDiscount(calculateDiscount(value))
-                        .setCard(0)
-                        .build());
+                try {
+                    items.add(new ItemBuilder()
+                            .setQuantity(value)
+                            .setProduct(key)
+                            .setDiscount(calculateDiscount(value))
+                            .build());
+                } catch (NoSuchIdentifierException | NoSuchCardException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         });
     }
@@ -90,12 +98,13 @@ public class CustomerCheck implements Check {
      * @param data input array, params
      * @return The Map with params
      */
-    protected Map<Integer, Integer> handle(String[] data) {
-        if (data == null) {
+    protected Map<Integer, Integer> handle(String[] data) throws IncorrectDataException {
+        if (data == null || Arrays.equals(data, new String[]{})) {
             return null;
         }
-        if (hasError(data)) {
-            System.out.println("Attention. Incorrect data present in the input array. Data were filtered.");
+        if (hasError(data) || !hasSameData(data)) {
+            throw new IncorrectDataException("Incorrect data present in the input array");
+//            System.out.println("Attention. Incorrect data present in the input array. Data were filtered.");
         }
 
         return Arrays.stream(data)
@@ -119,6 +128,20 @@ public class CustomerCheck implements Check {
                 .map(item -> item.replace("card", "0").split("-"))
                 .filter(array -> isInteger(array[0]) && isInteger(array[1]))
                 .count() != data.length;
+    }
+
+    /**
+     * Method check the same product Id is present in array
+     * @param data input array
+     * @return true if data hasn`t repeatable
+     */
+    private boolean hasSameData(String[] data) {
+        List<String> lst = Arrays.stream(data)
+                .map(element -> element.replaceAll("-(\\d+)", ""))
+                .filter(item -> !item.equals("card"))
+                .toList();
+        Set<String> set = new HashSet<>(lst);
+        return set.size() == lst.size();
     }
 
     /**
@@ -161,6 +184,9 @@ public class CustomerCheck implements Check {
         } else return 0;
     }
 
+    /**
+     * Method writes check to file in current folder
+     */
     @Override
     public void printCheck() {
         StringBuilder view = createView();
@@ -204,7 +230,7 @@ public class CustomerCheck implements Check {
 
                 total = total.add(totalItemPrice).subtract(discountItemPrice);
             }
-            if (item.getCardNumber() != 0) {
+            if (item.getCardNumber() != -1) {
                 card = item.getCard();
             }
         }
@@ -246,6 +272,12 @@ public class CustomerCheck implements Check {
         return total.subtract(totalWithDiscount);
     }
 
+    /**
+     * Method calculate discount for product
+     * @param total price
+     * @param discount value
+     * @return it`s a percent from total price
+     */
     private BigDecimal getDiscont(BigDecimal total, int discount) {
         return total
                 .multiply(new BigDecimal(discount))

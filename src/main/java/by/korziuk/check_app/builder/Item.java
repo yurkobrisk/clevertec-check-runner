@@ -1,10 +1,10 @@
 package by.korziuk.check_app.builder;
 
 import by.korziuk.check_app.CheckRunner;
+import by.korziuk.check_app.exception.NoSuchCardException;
+import by.korziuk.check_app.exception.NoSuchIdentifierException;
 import by.korziuk.check_app.model.Card;
 import by.korziuk.check_app.model.Product;
-
-import java.util.Objects;
 
 public class Item {
 
@@ -51,25 +51,34 @@ public class Item {
         return product;
     }
 
-    public void setProduct(int productId) {
-        //ToDo Get data from dataSet or DataBase
-        this.product = CheckRunner.data.getProductCollection()
-                .stream()
-                .filter(product -> product.getId() == productId)
-                .findFirst()
-                .orElse(null);
+    public void setProduct(int productId) throws NoSuchIdentifierException {
+        // Get data from dataSet or DataBase
+        if (productId == -1) {
+            this.product = null;
+        } else {
+            this.product = CheckRunner.data.getProductCollection()
+                    .stream()
+                    .filter(product -> product.getId() == productId)
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchIdentifierException("Product with id: " + productId + " not found."));
+        }
     }
 
     public Card getCard() {
         return card;
     }
 
-    public void setCard(int cardId) {
-        this.card = CheckRunner.data.getCardCollection()
-                .stream()
-                .filter(card -> card.getId() == cardId)
-                .findFirst()
-                .orElse(null);
+    public void setCard(int cardNumber) throws NoSuchCardException {
+        // Get data from dataSet or DataBase
+        if (cardNumber == -1) {
+            this.card = null;
+        } else {
+            this.card = CheckRunner.data.getCardCollection()
+                    .stream()
+                    .filter(card -> card.getId() == cardNumber)
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchCardException("Card with number: " + cardNumber + " not found."));
+        }
     }
 
     @Override
