@@ -129,15 +129,14 @@ public class CustomerCheck implements Check {
      */
     protected ArrayList<Product> handleDataAsProduct(String data) {
         //ToDo check data from file is correct
-        List<Product> products = Arrays.stream(data.split(";"))
+        return Arrays.stream(data.split(";"))
                 .map(record -> record.split(","))
                 .map(array -> new Product(
                         Integer.parseInt(array[0].trim()),
                         array[1].trim(),
                         array[2].trim(),
                         new BigDecimal(array[3].trim())))
-                .toList();
-        return new ArrayList<>(products);
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -147,15 +146,14 @@ public class CustomerCheck implements Check {
      */
     protected ArrayList<Card> handleDataAsCard(String data) {
         //ToDo check data from file is correct
-        List<Card> cards = Arrays.stream(data.split(";"))
+        return Arrays.stream(data.split(";"))
                 .map(record -> record.split(","))
                 .map(array -> new Card(
                         Integer.parseInt(array[0].trim()),
                         array[1].trim(),
                         array[2].trim(),
                         Integer.parseInt(array[3].trim())))
-                .collect(Collectors.toList());
-        return new ArrayList<>(cards);
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -204,7 +202,7 @@ public class CustomerCheck implements Check {
         List<String> lst = Arrays.stream(data)
                 .map(element -> element.replaceAll("-(\\d+)", ""))
                 .filter(item -> !item.equals("card"))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
         Set<String> set = new HashSet<>(lst);
         return set.size() == lst.size();
     }
