@@ -17,15 +17,16 @@ class CustomerCheckTest {
 
     @Test
     @DisplayName("should check the conversion of an array to a map")
+    @SuppressWarnings("unchecked")
     public void handle() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String[].class};
-        Method method = CustomerCheck.class.getDeclaredMethod("handle", args);
+        Method method = CustomerCheck.class.getDeclaredMethod("handle", String[].class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         String[] inputData = {"3-1", "2-5", "5-1", "card-1234"};
         //When
-        HashMap<Integer, Integer> resultMap = (HashMap) method.invoke(customerCheck, (Object) inputData);
+        HashMap<Integer, Integer> resultMap =
+                (HashMap<Integer, Integer>) method.invoke(customerCheck, (Object) inputData);
         //Then
         assertThat(resultMap.size()).isEqualTo(4);
         assertThat(resultMap.containsKey(0)).isTrue();
@@ -35,32 +36,35 @@ class CustomerCheckTest {
 
     @Test
     @DisplayName("should handle incorrect data and return size 1")
+    @SuppressWarnings("unchecked")
     public void should_handle_incorrect_data_and_return_size_1()
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String[].class};
-        Method method = CustomerCheck.class.getDeclaredMethod("handle", args);
+        Method method = CustomerCheck.class.getDeclaredMethod("handle", String[].class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         String[] inputData = {"card-12349"};
         //When
-        HashMap<Integer, Integer> resultMap = (HashMap) method.invoke(customerCheck, (Object) inputData);
+        HashMap<Integer, Integer> resultMap =
+                (HashMap<Integer, Integer>) method.invoke(customerCheck, (Object) inputData);
         //Then
         assertThat(resultMap.size()).isEqualTo(1);
     }
 
     @Test
     @DisplayName("should handle null empty data and return null")
+    @SuppressWarnings("unchecked")
     public void should_handle_null_empty_data_and_return_null()
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String[].class};
-        Method method = CustomerCheck.class.getDeclaredMethod("handle", args);
+        Method method = CustomerCheck.class.getDeclaredMethod("handle", String[].class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         String[] inputData = new String[]{};
-        HashMap<Integer, Integer> resultMap1 = (HashMap) method.invoke(customerCheck, (Object) inputData);
-        HashMap<Integer, Integer> resultMap2 = (HashMap) method.invoke(customerCheck, (Object) inputData);
+        HashMap<Integer, Integer> resultMap1 =
+                (HashMap<Integer, Integer>) method.invoke(customerCheck, (Object) inputData);
+        HashMap<Integer, Integer> resultMap2 =
+                (HashMap<Integer, Integer>) method.invoke(customerCheck, (Object) inputData);
         //When
         //Then
         assertThat(resultMap1).isNull();
@@ -68,16 +72,17 @@ class CustomerCheckTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void handleDataAsProduct()
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String.class};
-        Method method = CustomerCheck.class.getDeclaredMethod("handleDataAsProduct", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("handleDataAsProduct", String.class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
         String data = customerCheck.readFile("products.txt");
-        ArrayList<Product> products = (ArrayList) method.invoke(customerCheck, data);
+        ArrayList<Product> products = (ArrayList<Product>) method.invoke(customerCheck, data);
         //Then
         assertThat(products.size()).isEqualTo(11);
         assertThat(products.get(3).getDescription()).isEqualTo("pomodoro super");
@@ -85,11 +90,12 @@ class CustomerCheckTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void handleDataAsCard()
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String.class};
-        Method method = CustomerCheck.class.getDeclaredMethod("handleDataAsCard", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("handleDataAsCard", String.class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -103,8 +109,8 @@ class CustomerCheckTest {
 
     @Test
     public void isFileName() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Class[] args = new Class[]{String[].class};
-        Method method = CustomerCheck.class.getDeclaredMethod("isFileName", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("isFileName", String[].class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -117,8 +123,8 @@ class CustomerCheckTest {
     public void hasInputDataFileNames()
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String[].class};
-        Method method = CustomerCheck.class.getDeclaredMethod("hasInputDataFileNames", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("hasInputDataFileNames", String[].class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -132,8 +138,8 @@ class CustomerCheckTest {
     @Test
     public void hasError() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String[].class};
-        Method method = CustomerCheck.class.getDeclaredMethod("hasError", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("hasError", String[].class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -148,8 +154,8 @@ class CustomerCheckTest {
     @Test
     public void hasSameData() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String[].class};
-        Method method = CustomerCheck.class.getDeclaredMethod("hasSameData", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("hasSameData", String[].class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -161,8 +167,8 @@ class CustomerCheckTest {
     @Test
     public void isInteger() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{String.class};
-        Method method = CustomerCheck.class.getDeclaredMethod("isInteger", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("isInteger", String.class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -176,8 +182,8 @@ class CustomerCheckTest {
     @Test
     public void calculateDiscount() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{int.class};
-        Method method = CustomerCheck.class.getDeclaredMethod("calculateDiscount", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("calculateDiscount", int.class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -190,8 +196,8 @@ class CustomerCheckTest {
     @Test
     public void calculateTotal() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{int.class, BigDecimal.class};
-        Method method = CustomerCheck.class.getDeclaredMethod("calculateTotal", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("calculateTotal", int.class, BigDecimal.class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
@@ -201,23 +207,10 @@ class CustomerCheckTest {
     }
 
     @Test
-    public void calculateDiscont() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void getDiscount() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //Given
-        Class[] args = new Class[]{BigDecimal.class, int.class};
-        Method method = CustomerCheck.class.getDeclaredMethod("calculateDiscont", args);
-        method.setAccessible(true);
-        CustomerCheck customerCheck = new CustomerCheck();
-        //When
-        BigDecimal result = (BigDecimal) method.invoke(customerCheck, new BigDecimal("10.00"), 5);
-        //Then
-        assertThat(result).isEqualTo("9.50");
-    }
-
-    @Test
-    public void getDiscont() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        //Given
-        Class[] args = new Class[]{BigDecimal.class, int.class};
-        Method method = CustomerCheck.class.getDeclaredMethod("getDiscont", args);
+        Method method = CustomerCheck.class
+                .getDeclaredMethod("getDiscount", BigDecimal.class, int.class);
         method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When

@@ -69,7 +69,7 @@ public class CustomerCheck implements Check {
     }
 
     /**
-     * Method checkes array is it a file name
+     * Method checks array is it a file name
      * @param data input string array
      * @return true if it`s just a simple file name
      */
@@ -77,7 +77,7 @@ public class CustomerCheck implements Check {
         if (data.length >1) {
             return false;
         } else {
-            return data[0].matches("(\\w{1,}).txt");
+            return data[0].matches("(\\w+).txt");
         }
     }
 
@@ -90,7 +90,7 @@ public class CustomerCheck implements Check {
         if (data.length != 3) {
             return false;
         } else {
-            return Arrays.stream(data).filter(element -> element.matches("(\\w{1,}).txt")).count() == 3;
+            return Arrays.stream(data).filter(element -> element.matches("(\\w+).txt")).count() == 3;
         }
     }
 
@@ -161,7 +161,7 @@ public class CustomerCheck implements Check {
         }
 
         return Arrays.stream(data)
-                .filter(str -> str.matches("(\\w{1,})-(\\d{1,})"))
+                .filter(str -> str.matches("(\\w+)-(\\d+)"))
                 .map(item -> item.replace("card", "0").split("-"))
                 .filter(array -> isInteger(array[0]) && isInteger(array[1]))
                 .collect(Collectors.toMap(
@@ -177,14 +177,14 @@ public class CustomerCheck implements Check {
      */
     private boolean hasError(String[] data) {
         return Arrays.stream(data)
-                .filter(str -> str.matches("(\\w{1,})-(\\d{1,})"))
+                .filter(str -> str.matches("(\\w+)-(\\d+)"))
                 .map(item -> item.replace("card", "0").split("-"))
                 .filter(array -> isInteger(array[0]) && isInteger(array[1]))
                 .count() != data.length;
     }
 
     /**
-     * Method check the same product Id is present in array
+     * Method check the same productId is present in array
      * @param data input array
      * @return true if data is repeatable
      */
@@ -278,7 +278,7 @@ public class CustomerCheck implements Check {
                 if (item.getDiscount() > 0) {
                     resultCheck.append(String.format("                         discount:%4s%8s\n",
                             item.getDiscount() + "%",
-                            discountItemPrice = (getDiscont(totalItemPrice, item.getDiscount()))));
+                            discountItemPrice = (getDiscount(totalItemPrice, item.getDiscount()))));
                 }
 
                 total = total.add(totalItemPrice).subtract(discountItemPrice);
@@ -294,8 +294,8 @@ public class CustomerCheck implements Check {
             resultCheck.append(String.format("                discount card-%-6s%2s%8s\n",
                     card.getId(),
                     card.getDiscount() + "%",
-                    getDiscont(total, card.getDiscount())));
-            resultCheck.append(String.format("TOTAL %40s\n", total.subtract(getDiscont(total, card.getDiscount()))));
+                    getDiscount(total, card.getDiscount())));
+            resultCheck.append(String.format("TOTAL %40s\n", total.subtract(getDiscount(total, card.getDiscount()))));
             return resultCheck;
         }
         resultCheck.append(String.format("TOTAL %40s\n", total));
@@ -304,7 +304,7 @@ public class CustomerCheck implements Check {
 
     /**
      * Method calculate total price for product
-     * @param quantity of roducts
+     * @param quantity of products
      * @param price of product
      * @return total price for product
      */
@@ -314,24 +314,11 @@ public class CustomerCheck implements Check {
 
     /**
      * Method calculate discount for product
-     * @param total product price
-     * @param discount for product in %
-     * @return discount = total * discount / 100%
-     */
-    private BigDecimal calculateDiscont(BigDecimal total, int discount) {
-        BigDecimal totalWithDiscount = total
-                .multiply(new BigDecimal(discount))
-                .divide(new BigDecimal("100"), RoundingMode.DOWN);
-        return total.subtract(totalWithDiscount);
-    }
-
-    /**
-     * Method calculate discount for product
      * @param total price
      * @param discount value
      * @return it`s a percent from total price
      */
-    private BigDecimal getDiscont(BigDecimal total, int discount) {
+    private BigDecimal getDiscount(BigDecimal total, int discount) {
         return total
                 .multiply(new BigDecimal(discount))
                 .divide(new BigDecimal("100"), RoundingMode.DOWN);
