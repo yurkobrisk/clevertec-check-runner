@@ -86,21 +86,12 @@ public class CustomerCheck implements Check {
      * @param data string array
      * @return true if data in array is file names
      */
-    protected boolean hasInputDataFileNames(String[] data) {
+    private boolean hasInputDataFileNames(String[] data) {
         if (data.length != 3) {
             return false;
         } else {
-            return Arrays.stream(data).filter(this::isFileName).count() == 3;
+            return Arrays.stream(data).filter(element -> element.matches("(\\w{1,}).txt")).count() == 3;
         }
-    }
-
-    /**
-     * Method checks is input string same as a pattern file name
-     * @param fileName string
-     * @return true if it`s file name
-     */
-    protected boolean isFileName(String fileName) {
-        return fileName.matches("(\\w{1,}).txt");
     }
 
     /**

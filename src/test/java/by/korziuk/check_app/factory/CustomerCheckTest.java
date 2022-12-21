@@ -77,7 +77,7 @@ class CustomerCheckTest {
         CustomerCheck customerCheck = new CustomerCheck();
         //When
         String data = customerCheck.readFile("products.txt");
-        ArrayList<Product> products = (ArrayList<Product>) method.invoke(customerCheck, data);
+        ArrayList<Product> products = (ArrayList) method.invoke(customerCheck, data);
         //Then
         assertThat(products.size()).isEqualTo(11);
         assertThat(products.get(3).getDescription()).isEqualTo("pomodoro super");
@@ -102,13 +102,29 @@ class CustomerCheckTest {
     }
 
     @Test
-    public void hasInputDataFileNames() {
-        //Given
+    public void isFileName() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class[] args = new Class[]{String[].class};
+        Method method = CustomerCheck.class.getDeclaredMethod("isFileName", args);
+        method.setAccessible(true);
         CustomerCheck customerCheck = new CustomerCheck();
         //When
-        boolean isDataPresent = customerCheck.hasInputDataFileNames(new String[]{"products.txt", "cards.txt", "input.txt"});
+        String[] array = new String[]{"products.txt", "cards.txt", "input.txt"};
         //Then
-        assertThat(isDataPresent).isTrue();
+        assertThat((boolean) method.invoke(customerCheck, (Object) array)).isFalse();
+        assertThat((boolean) method.invoke(customerCheck, (Object) new String[]{"products.txt"})).isTrue();
+    }
+    @Test
+    public void hasInputDataFileNames()
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //Given
+        Class[] args = new Class[]{String[].class};
+        Method method = CustomerCheck.class.getDeclaredMethod("hasInputDataFileNames", args);
+        method.setAccessible(true);
+        CustomerCheck customerCheck = new CustomerCheck();
+        //When
+        String[] array = new String[]{"products.txt", "cards.txt", "input.txt"};
+        //Then
+        assertThat((boolean) method.invoke(customerCheck, (Object) array)).isTrue();
     }
 
 
