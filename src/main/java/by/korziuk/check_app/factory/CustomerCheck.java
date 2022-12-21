@@ -127,7 +127,7 @@ public class CustomerCheck implements Check {
      * @param data input String
      * @return list of products
      */
-    protected ArrayList<Product> handleDataAsProduct(String data) {
+    private ArrayList<Product> handleDataAsProduct(String data) {
         //ToDo check data from file is correct
         return Arrays.stream(data.split(";"))
                 .map(record -> record.split(","))
@@ -144,7 +144,7 @@ public class CustomerCheck implements Check {
      * @param data input String
      * @return list of cards
      */
-    protected ArrayList<Card> handleDataAsCard(String data) {
+    private ArrayList<Card> handleDataAsCard(String data) {
         //ToDo check data from file is correct
         return Arrays.stream(data.split(";"))
                 .map(record -> record.split(","))
@@ -161,13 +161,12 @@ public class CustomerCheck implements Check {
      * @param data input array, params
      * @return The Map with params
      */
-    protected Map<Integer, Integer> handle(String[] data) throws IncorrectDataException {
+    private Map<Integer, Integer> handle(String[] data) throws IncorrectDataException {
         if (data == null || Arrays.equals(data, new String[]{})) {
             return null;
         }
-        if (hasError(data) || !hasSameData(data)) {
+        if (hasError(data) || hasSameData(data)) {
             throw new IncorrectDataException("Incorrect data present in the input array");
-//            System.out.println("Attention. Incorrect data present in the input array. Data were filtered.");
         }
 
         return Arrays.stream(data)
@@ -196,7 +195,7 @@ public class CustomerCheck implements Check {
     /**
      * Method check the same product Id is present in array
      * @param data input array
-     * @return true if data hasn`t repeatable
+     * @return true if data is repeatable
      */
     private boolean hasSameData(String[] data) {
         List<String> lst = Arrays.stream(data)
@@ -204,7 +203,7 @@ public class CustomerCheck implements Check {
                 .filter(item -> !item.equals("card"))
                 .collect(Collectors.toCollection(ArrayList::new));
         Set<String> set = new HashSet<>(lst);
-        return set.size() == lst.size();
+        return set.size() != lst.size();
     }
 
     /**
