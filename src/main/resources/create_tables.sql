@@ -1,0 +1,15 @@
+CREATE TABLE PRODUCT
+(
+    P_ID serial PRIMARY KEY,
+    P_NAME varchar(50) NOT NULL,
+    P_DESCRIPTION varchar(100) NOT NULL,
+    P_PRICE numeric(6,2) NOT NULL
+);
+
+CREATE TABLE DISCOUNT_CARD
+(
+    DC_ID serial PRIMARY KEY,
+    DC_NAME varchar(50) NOT NULL,
+    DC_LASTNAME varchar(50) NOT NULL,
+    DC_DISCOUNT integer NOT NULL
+);

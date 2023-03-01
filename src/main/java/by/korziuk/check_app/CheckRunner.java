@@ -1,5 +1,6 @@
 package by.korziuk.check_app;
 
+import by.korziuk.check_app.dao.DaoConfiguration;
 import by.korziuk.check_app.data.Data;
 import by.korziuk.check_app.exception.IncorrectDataException;
 import by.korziuk.check_app.exception.NoDataException;
@@ -13,6 +14,7 @@ public class CheckRunner {
 
     public String init() {
         data = new Data();
+        DaoConfiguration.load();
         return "init CheckRunner ...";
     }
 
