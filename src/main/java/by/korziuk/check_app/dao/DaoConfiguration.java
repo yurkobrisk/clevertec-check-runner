@@ -68,6 +68,10 @@ public class DaoConfiguration {
         }
     }
 
+    /**
+     * Method insert initial data into tables of database
+     * @param data Instance consists list of products and list of discount card
+     */
     public static void insertData(Data data) {
 
         String productSQL = "INSERT INTO products VALUES(?,?,?,?)";
