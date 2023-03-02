@@ -15,6 +15,7 @@ public class CheckRunner {
     public String init() {
         data = new Data();
         DaoConfiguration.load();
+        DaoConfiguration.insertData(data);
         return "init CheckRunner ...";
     }
 
