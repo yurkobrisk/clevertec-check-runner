@@ -7,7 +7,6 @@ import by.korziuk.check_app.model.Card;
 import by.korziuk.check_app.model.Product;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 
-import java.math.BigDecimal;
 import java.sql.*;
 
 public class DaoConfiguration {
